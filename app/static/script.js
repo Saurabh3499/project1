@@ -2,29 +2,42 @@ const app = {
     state: {
         table: null,
         cart: [],
-        menu: []
+        menu: [],
+        filter: 'All'
     },
 
     init: async () => {
+        // Check URL for Table ID (?table=5)
+        const urlParams = new URLSearchParams(window.location.search);
+        const tableId = urlParams.get('table');
+
         try {
             const res = await fetch('/api/menu');
             app.state.menu = await res.json();
-            app.renderMenu();
         } catch (e) {
             console.error("Failed to load menu", e);
         }
+
+        if (tableId) {
+            app.startSession(tableId);
+        }
     },
 
-    startSession: () => {
+    manualStart: () => {
         const tableInput = document.getElementById('input-table');
         if (!tableInput.value) {
             alert("Please enter a table number");
             return;
         }
-        app.state.table = tableInput.value;
+        app.startSession(tableInput.value);
+    },
+
+    startSession: (tableId) => {
+        app.state.table = tableId;
         document.getElementById('lbl-table').innerText = app.state.table;
         document.getElementById('table-indicator').classList.remove('hidden');
 
+        app.renderMenu();
         app.switchView('view-menu');
         document.getElementById('cart-float').classList.remove('hidden');
     },
@@ -37,15 +50,26 @@ const app = {
         window.scrollTo(0, 0);
     },
 
+    filterMenu: (category) => {
+        app.state.filter = category;
+        app.renderMenu();
+    },
+
     renderMenu: () => {
         const container = document.getElementById('menu-list');
-        container.innerHTML = app.state.menu.map(item => `
+        const filtered = app.state.filter === 'All'
+            ? app.state.menu
+            : app.state.menu.filter(item => item.category === app.state.filter);
+
+        container.innerHTML = filtered.map(item => `
             <div class="card menu-item">
-                <img src="${item.image}" class="menu-img" alt="${item.name}">
                 <div class="menu-info">
-                    <div style="font-weight: 600;">${item.name}</div>
-                    <div style="color: var(--text-secondary); font-size: 14px;">${item.category}</div>
-                    <div class="price">$${item.price.toFixed(2)}</div>
+                    <div style="display:flex; align-items:center;">
+                        <span class="${item.is_veg ? 'veg-icon' : 'non-veg-icon'}"></span>
+                        <div style="font-weight: 600;">${item.name}</div>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 14px; margin-top:4px;">${item.category}</div>
+                    <div class="price">₹${item.price.toFixed(2)}</div>
                 </div>
                 <div class="add-btn" onclick="app.addToCart('${item.id}')">
                     +
@@ -71,8 +95,8 @@ const app = {
         const total = app.state.cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
 
         document.getElementById('cart-count').innerText = count;
-        document.getElementById('cart-total').innerText = '$' + total.toFixed(2);
-        document.getElementById('lbl-total').innerText = '$' + total.toFixed(2);
+        document.getElementById('cart-total').innerText = '₹' + total.toFixed(2);
+        document.getElementById('lbl-total').innerText = '₹' + total.toFixed(2);
     },
 
     showMenu: () => {
@@ -87,12 +111,23 @@ const app = {
         container.innerHTML = app.state.cart.map(item => `
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                 <div>${item.quantity}x ${item.name}</div>
-                <div>$${(item.price * item.quantity).toFixed(2)}</div>
+                <div>₹${(item.price * item.quantity).toFixed(2)}</div>
             </div>
         `).join('');
 
         app.switchView('view-checkout');
         document.getElementById('cart-float').classList.add('hidden');
+        app.togglePaymentForm(); // Ensure state is correct
+    },
+
+    togglePaymentForm: () => {
+        const method = document.getElementById('payment-method').value;
+        const form = document.getElementById('online-payment-form');
+        if (method === 'counter') {
+            form.classList.add('hidden');
+        } else {
+            form.classList.remove('hidden');
+        }
     },
 
     submitOrder: async () => {
@@ -125,4 +160,3 @@ const app = {
 };
 
 app.init();
-
