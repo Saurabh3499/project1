@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gourmet Bytes</title>
+    <title>Gourmet Bytes | Indian Cuisine</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
     <div class="container">
-        
+
         <!-- Header -->
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h1>Gourmet Bytes</h1>
-            <div id="table-indicator" class="hidden" style="background: var(--surface); padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+            <div id="table-indicator" class="hidden"
+                style="background: var(--surface); padding: 5px 10px; border-radius: 20px; font-size: 12px;">
                 Table #<span id="lbl-table"></span>
             </div>
         </header>
@@ -24,51 +27,78 @@
         <section id="view-scan" class="fade-in">
             <div class="card" style="text-align: center; padding: 40px 20px;">
                 <img src="https://img.icons8.com/nolan/96/qr-code.png" alt="QR" style="margin-bottom: 20px;">
-                <h2>Welcome</h2>
-                <p style="color: var(--text-secondary)">Please scan the table code or enter your table number to begin.</p>
-                
+                <h2>Namaste! 🙏</h2>
+                <p style="color: var(--text-secondary)">Please scan the table code or enter your table number to begin.
+                </p>
+
                 <input type="number" id="input-table" placeholder="Enter Table Number (e.g. 5)" min="1">
-                <button class="btn btn-primary" onclick="app.startSession()">Start Ordering</button>
+                <button class="btn btn-primary" onclick="app.manualStart()">Start Ordering</button>
             </div>
         </section>
 
         <!-- SECTION 2: MENU -->
         <section id="view-menu" class="hidden fade-in">
-            <h3 style="margin-bottom: 15px;">Menu</h3>
+            <!-- Navigation -->
+            <div style="overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 10px;">
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('All')">All</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Breakfast')">Breakfast</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Snacks')">Snacks</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Main Course')">Main Course</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Breads')">Breads</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Rice')">Rice</button>
+                <button class="btn-outline"
+                    style="display:inline-block; width:auto; padding: 8px 15px; margin-right:5px;"
+                    onclick="app.filterMenu('Drinks')">Drinks</button>
+            </div>
+
             <div id="menu-list" class="menu-grid">
                 <!-- Items injected here by JS -->
             </div>
-            
+
             <div style="height: 80px;"></div> <!-- Spacer for cart float -->
         </section>
 
         <!-- SECTION 3: CART/CHECKOUT -->
         <section id="view-checkout" class="hidden fade-in">
-            <button class="btn btn-outline" onclick="app.showMenu()" style="margin-bottom: 20px;">&larr; Back to Menu</button>
-            
+            <button class="btn btn-outline" onclick="app.showMenu()" style="margin-bottom: 20px;">&larr; Back to
+                Menu</button>
+
             <div class="card">
                 <h3>Your Order</h3>
                 <div id="cart-items">
                     <!-- Cart Items injected here -->
                 </div>
-                <div style="border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold;">
+                <div
+                    style="border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold;">
                     <span>Total</span>
-                    <span id="lbl-total">$0.00</span>
+                    <span id="lbl-total">₹0.00</span>
                 </div>
             </div>
 
             <div class="card">
                 <h3>Payment Method</h3>
-                <select id="payment-method">
-                    <option value="online">Pay Online (Card/Apple Pay)</option>
+                <select id="payment-method" onchange="app.togglePaymentForm()">
+                    <option value="online">Pay Online (Card/UPI)</option>
                     <option value="counter">Pay at Counter (Cash)</option>
                 </select>
-                
+
                 <div id="online-payment-form">
-                    <input type="text" placeholder="Card Number" value="4242 4242 4242 4242">
+                    <input type="text" placeholder="Card Number / UPI ID" value="">
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" placeholder="MM/YY" value="12/25">
-                        <input type="text" placeholder="CVC" value="123">
+                        <input type="text" placeholder="MM/YY" value="">
+                        <input type="text" placeholder="CVC" value="">
                     </div>
                 </div>
             </div>
@@ -82,10 +112,12 @@
                 <div style="font-size: 50px; margin-bottom: 10px;">🎉</div>
                 <h2>Order Placed!</h2>
                 <p style="color: var(--text-secondary)">Your food is being prepared.</p>
-                <div style="background: rgba(0,255,0,0.1); color: #4caf50; padding: 10px; border-radius: 8px; margin-top: 20px;">
+                <div
+                    style="background: rgba(0,255,0,0.1); color: #4caf50; padding: 10px; border-radius: 8px; margin-top: 20px;">
                     Order sent to Kitchen
                 </div>
-                <button class="btn btn-outline" onclick="location.reload()" style="margin-top: 30px;">Start New Order</button>
+                <button class="btn btn-outline" onclick="location.reload()" style="margin-top: 30px;">Start New
+                    Order</button>
             </div>
         </section>
 
@@ -93,13 +125,14 @@
 
     <!-- Floating Cart Button -->
     <div id="cart-float" class="cart-float hidden">
-        <button class="btn btn-primary" onclick="app.showCheckout()" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn btn-primary" onclick="app.showCheckout()"
+            style="display: flex; justify-content: space-between; align-items: center;">
             <span>View Cart (<span id="cart-count">0</span>)</span>
-            <span id="cart-total">$0.00</span>
+            <span id="cart-total">₹0.00</span>
         </button>
     </div>
 
     <script src="script.js"></script>
 </body>
-</html>
 
+</html>
