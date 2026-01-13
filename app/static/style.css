@@ -1,6 +1,8 @@
 :root {
-    --primary: #FFB300; /* Amber Gold */
-    --accent: #FF6D00; /* Deep Orange */
+    --primary: #FFB300;
+    /* Amber Gold */
+    --accent: #FF6D00;
+    /* Deep Orange */
     --bg-dark: #121212;
     --surface: rgba(255, 255, 255, 0.05);
     --surface-hover: rgba(255, 255, 255, 0.1);
@@ -8,6 +10,8 @@
     --text-secondary: #aaaaaa;
     --border: rgba(255, 255, 255, 0.1);
     --blur: 10px;
+    --veg: #2ecc71;
+    --non-veg: #e74c3c;
 }
 
 body {
@@ -16,14 +20,15 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-primary);
-    background-image: 
+    background-image:
         radial-gradient(circle at 10% 20%, rgba(255, 109, 0, 0.1) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(255, 179, 0, 0.1) 0%, transparent 40%);
     min-height: 100vh;
 }
 
 .container {
-    max-width: 480px; /* Mobile first constrained width */
+    max-width: 480px;
+    /* Mobile first constrained width */
     margin: 0 auto;
     padding: 20px;
     min-height: 100vh;
@@ -42,7 +47,9 @@ body {
     transition: transform 0.2s;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     margin: 0 0 10px 0;
     font-weight: 700;
 }
@@ -101,6 +108,7 @@ h1 {
     height: 80px;
     border-radius: 12px;
     object-fit: cover;
+    background: #333;
 }
 
 .menu-info {
@@ -113,6 +121,28 @@ h1 {
     font-size: 18px;
 }
 
+.veg-icon,
+.non-veg-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid;
+    margin-right: 5px;
+}
+
+.veg-icon {
+    border-color: var(--veg);
+    background: var(--veg);
+    box-shadow: 0 0 5px var(--veg);
+}
+
+.non-veg-icon {
+    border-color: var(--non-veg);
+    background: var(--non-veg);
+    box-shadow: 0 0 5px var(--non-veg);
+}
+
 .add-btn {
     background: var(--surface-hover);
     color: white;
@@ -123,34 +153,3 @@ h1 {
     cursor: pointer;
     display: grid;
     place-items: center;
-}
-
-/* Hidden Sections */
-.hidden {
-    display: none;
-}
-
-/* Cart Float */
-.cart-float {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 440px;
-    z-index: 100;
-}
-
-/* Inputs */
-input, select {
-    width: 100%;
-    padding: 12px;
-    background: rgba(0,0,0,0.2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: white;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-
