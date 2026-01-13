@@ -63,7 +63,7 @@ def generate_menu():
             ("Lassi (Salted)", 80, True), ("Mango Lassi", 100, True), ("Butter Milk", 40, True),
             ("Fresh Lime Soda", 60, True), ("Cola", 40, True)
         ]
-    ]
+    }
 
     # Algorithmically expand to 200+ items by adding variations
     count = 1
