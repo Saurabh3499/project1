@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Bytes</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>Gourmet Bytes</h1>
+            <div id="table-indicator" class="hidden" style="background: var(--surface); padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+                Table #<span id="lbl-table"></span>
+            </div>
+        </header>
+
+        <!-- SECTION 1: SCAN / WELCOME -->
+        <section id="view-scan" class="fade-in">
+            <div class="card" style="text-align: center; padding: 40px 20px;">
+                <img src="https://img.icons8.com/nolan/96/qr-code.png" alt="QR" style="margin-bottom: 20px;">
+                <h2>Welcome</h2>
+                <p style="color: var(--text-secondary)">Please scan the table code or enter your table number to begin.</p>
+                
+                <input type="number" id="input-table" placeholder="Enter Table Number (e.g. 5)" min="1">
+                <button class="btn btn-primary" onclick="app.startSession()">Start Ordering</button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MENU -->
+        <section id="view-menu" class="hidden fade-in">
+            <h3 style="margin-bottom: 15px;">Menu</h3>
+            <div id="menu-list" class="menu-grid">
+                <!-- Items injected here by JS -->
+            </div>
+            
+            <div style="height: 80px;"></div> <!-- Spacer for cart float -->
+        </section>
+
+        <!-- SECTION 3: CART/CHECKOUT -->
+        <section id="view-checkout" class="hidden fade-in">
+            <button class="btn btn-outline" onclick="app.showMenu()" style="margin-bottom: 20px;">&larr; Back to Menu</button>
+            
+            <div class="card">
+                <h3>Your Order</h3>
+                <div id="cart-items">
+                    <!-- Cart Items injected here -->
+                </div>
+                <div style="border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold;">
+                    <span>Total</span>
+                    <span id="lbl-total">$0.00</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Payment Method</h3>
+                <select id="payment-method">
+                    <option value="online">Pay Online (Card/Apple Pay)</option>
+                    <option value="counter">Pay at Counter (Cash)</option>
+                </select>
+                
+                <div id="online-payment-form">
+                    <input type="text" placeholder="Card Number" value="4242 4242 4242 4242">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" placeholder="MM/YY" value="12/25">
+                        <input type="text" placeholder="CVC" value="123">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="app.submitOrder()">Confirm & Pay</button>
+        </section>
+
+        <!-- SECTION 4: SUCCESS -->
+        <section id="view-success" class="hidden fade-in" style="text-align: center; margin-top: 50px;">
+            <div class="card">
+                <div style="font-size: 50px; margin-bottom: 10px;">🎉</div>
+                <h2>Order Placed!</h2>
+                <p style="color: var(--text-secondary)">Your food is being prepared.</p>
+                <div style="background: rgba(0,255,0,0.1); color: #4caf50; padding: 10px; border-radius: 8px; margin-top: 20px;">
+                    Order sent to Kitchen
+                </div>
+                <button class="btn btn-outline" onclick="location.reload()" style="margin-top: 30px;">Start New Order</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Floating Cart Button -->
+    <div id="cart-float" class="cart-float hidden">
+        <button class="btn btn-primary" onclick="app.showCheckout()" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>View Cart (<span id="cart-count">0</span>)</span>
+            <span id="cart-total">$0.00</span>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
